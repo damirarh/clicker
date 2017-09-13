@@ -4,7 +4,6 @@ import { App, Config, Form, IonicModule, Keyboard, DomController, MenuController
 import { AlertControllerMock, ConfigMock, PlatformMock } from 'ionic-mocks';
 import { Page2 }      from './page2';
 
-let fixture: ComponentFixture<Page2> = null;
 let instance: any = null;
 
 let alertSpy: any;
@@ -13,40 +12,19 @@ let alertControllerSpy: any;
 describe('Pages: Page2', () => {
 
   // demonstration on how to manually compile the test bed (as opposed to calling TestUtils)
-  beforeEach(async(() => {
+  beforeEach(() => {
 
-    TestBed.configureTestingModule({
-      declarations: [Page2],
-      providers: [
-        App, DomController, Form, Keyboard, MenuController, NavController,
-        {provide: Config, useFactory: () => ConfigMock.instance()},
-        {provide: Platform, useFactory: () => PlatformMock.instance()},
-        {provide: AlertController, useFactory: () => AlertControllerMock.instance()},
-      ],
-      imports: [
-        FormsModule,
-        IonicModule,
-        ReactiveFormsModule,
-      ],
-    })
-    .compileComponents().then(() => {
-      fixture = TestBed.createComponent(Page2);
-      instance = fixture;
-      fixture.detectChanges();
-      fixture.componentInstance.onGainChange();
+    let alertController: AlertController = AlertControllerMock.instance();
+    instance = new Page2(alertController);
 
-      alertSpy = fixture.componentInstance.alertController;
-      alertControllerSpy = fixture.componentInstance.alertController.create();
+    instance.onGainChange();
 
-    });
-  }));
+    alertSpy = instance.alertController;
+    alertControllerSpy = instance.alertController.create();
 
-  afterEach(() => {
-    fixture.destroy();
   });
 
   it('should create page2', () => {
-    expect(fixture).toBeTruthy();
     expect(instance).toBeTruthy();
   });
 
@@ -61,7 +39,7 @@ describe('Pages: Page2', () => {
     expect(alertSpy.create).not.toHaveBeenCalled();
     expect(alertControllerSpy.present).not.toHaveBeenCalled();
 
-    fixture.componentInstance.showSimpleAlert();
+    instance.showSimpleAlert();
     tick();
 
     expect(alertSpy.create).toHaveBeenCalledTimes(1);
@@ -77,16 +55,16 @@ describe('Pages: Page2', () => {
     alertSpy.create.calls.reset();
     alertControllerSpy.present.calls.reset();
 
-    fixture.componentInstance.okEd = false;
+    instance.okEd = false;
 
-    expect(fixture.componentInstance.okEd).toBeFalsy();
+    expect(instance.okEd).toBeFalsy();
 
-    fixture.componentInstance.showMoreAdvancedAlert();
+    instance.showMoreAdvancedAlert();
     tick();
 
-    fixture.componentInstance.OK();
+    instance.OK();
 
-    expect(fixture.componentInstance.okEd).toBeTruthy();
+    expect(instance.okEd).toBeTruthy();
 
   }));
 
