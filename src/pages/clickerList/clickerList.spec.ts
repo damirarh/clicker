@@ -1,21 +1,20 @@
+import { ClickersServiceMock } from '../../services/clickers.mock';
+import { ClickersService } from '../../services/clickers';
 import { ComponentFixture, async }    from '@angular/core/testing';
 import { TestUtils }                  from '../../test';
 import { ClickerList }                from './clickerList';
 import { ClickerButton, ClickerForm } from '../../components';
+import { NavController } from 'ionic-angular';
+import { NavControllerMock } from 'ionic-mocks';
 
-let fixture: ComponentFixture<ClickerList> = null;
 let instance: any = null;
 
 describe('ClickerList', () => {
 
-  beforeEach(async(() => TestUtils.beforeEachCompiler([ClickerList, ClickerForm, ClickerButton]).then(compiled => {
-    fixture = compiled.fixture;
-    instance = compiled.instance;
-    fixture.detectChanges();
-  })));
-
-  afterEach(() => {
-    fixture.destroy();
+  beforeEach(() => {
+    let navController: NavController = NavControllerMock.instance();
+    let clickersService: ClickersService = new ClickersServiceMock() as any;
+    instance = new ClickerList(navController, clickersService);
   });
 
   it('initialises', () => {
